@@ -31,7 +31,7 @@
         </div>
         <div class="intro-display" aria-label="Vault status display">
           <span class="display-label">NIGHT PROTOCOL</span>
-          <div class="display-code"><b id="chamberCode">01</b><span>/</span><b>03</b></div>
+          <div class="display-code"><b id="chamberCode">01</b><span>/</span><b id="totalNights">05</b></div>
           <span class="display-status" id="uplinkStatus">GATE SEALED</span>
         </div>
       </section>
@@ -40,7 +40,9 @@
         <div class="progress-line"><span id="progressFill"></span></div>
         <button class="checkpoint active" data-checkpoint="0"><span>01</span><small>Night one</small></button>
         <button class="checkpoint" data-checkpoint="1" disabled><span>02</span><small>Night two</small></button>
-        <button class="checkpoint" data-checkpoint="2" disabled><span>03</span><small>Last night</small></button>
+        <button class="checkpoint" data-checkpoint="2" disabled><span>03</span><small>Night three</small></button>
+        <button class="checkpoint" data-checkpoint="3" disabled><span>04</span><small>Night four</small></button>
+        <button class="checkpoint" data-checkpoint="4" disabled><span>05</span><small>Dawn run</small></button>
       </nav>
 
       <section class="game-board" aria-live="polite">
@@ -99,6 +101,18 @@
         </div>
       </section>
 
+      <section class="target-panel is-hidden" id="targetPanel" aria-labelledby="targetTitle">
+        <div class="target-header">
+          <div><p class="eyebrow">BONUS SIGNAL SWEEP</p><h2 id="targetTitle">Click every hostile signature.</h2></div>
+          <div class="target-reward"><span>CACHE REWARD</span><strong>+100 SCRAP</strong></div>
+        </div>
+        <div class="target-stage" id="targetStage" aria-label="Target clicking puzzle">
+          <span class="radar-label">SCAN GRID // ROOFTOP SECTOR</span>
+          <span class="target-counter" id="targetCounter">00 / 06</span>
+        </div>
+        <p class="target-feedback" id="targetFeedback">Find and click the glowing signal targets before the horde arrives.</p>
+      </section>
+
       <section class="survival-panel is-hidden" id="survivalPanel" aria-labelledby="survivalTitle">
         <div class="survival-header">
           <div>
@@ -117,7 +131,7 @@
             <div class="threat-scene" id="threatScene" aria-label="Approaching monsters">
               <div class="moon"></div>
               <div class="cityline"></div>
-              <div class="boss-monster" id="bossMonster"><span class="clock-face"><b id="clockHand"></b></span><span class="boss-eye left"></span><span class="boss-eye right"></span><span class="boss-maw"><i></i><i></i><i></i><i></i></span><span class="boss-body"></span></div>
+              <div class="boss-monster" id="bossMonster"><span class="clock-face"><span class="clock-ticks"></span><span class="clock-numerals"><i class="n12">12</i><i class="n1">1</i><i class="n2">2</i><i class="n3">3</i><i class="n4">4</i><i class="n5">5</i><i class="n6">6</i><i class="n7">7</i><i class="n8">8</i><i class="n9">9</i><i class="n10">10</i><i class="n11">11</i></span><b id="clockHand"></b><b class="clock-minute"></b><span class="clock-pin"></span></span><span class="boss-eye left"></span><span class="boss-eye right"></span><span class="boss-maw"><i></i><i></i><i></i><i></i></span><span class="boss-body"></span></div>
               <div class="zombie-pack" id="zombiePack"></div>
               <div class="gate"><i></i><i></i><i></i><i></i><i></i><i></i></div>
               <div class="barricade-health"><span>GATE INTEGRITY</span><div><b id="gateHealthBar"></b></div><strong id="gateHealth">100%</strong></div>
@@ -138,7 +152,7 @@
         <p class="eyebrow">SUNRISE DETECTED</p>
         <h2>You cracked the code.<br /><em>You survived the dark.</em></h2>
         <div class="final-score"><span>SCRAP BANKED</span><strong id="finalScore">000</strong></div>
-        <p id="completeMessage">Three nights survived. The bunker is still standing.</p>
+        <p id="completeMessage">Five nights survived. The bunker is still standing.</p>
         <button class="primary-button" id="playAgainButton">Try another run <span>↻</span></button>
       </section>
 
