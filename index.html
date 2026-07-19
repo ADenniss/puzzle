@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#07111f" />
+    <title>Lastlight — Puzzle Survival</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Circuit Vault home">
+          <span class="brand-mark"><i></i><i></i><i></i></span>
+          <span>LAST<span>LIGHT</span></span>
+        </a>
+        <div class="topbar-right">
+          <div class="score-readout"><span>BEST</span><strong id="bestScore">000</strong></div>
+          <button class="sound-button" id="soundButton" aria-pressed="true" aria-label="Toggle sound"><span class="sound-icon">◖))</span><span>SOUND</span></button>
+        </div>
+      </header>
+
+      <section class="game-intro">
+        <div>
+          <p class="eyebrow">NIGHT 07 / BUNKER SIGNAL</p>
+          <h1>Think fast.<br /><em>Live longer.</em></h1>
+          <p class="intro-copy">Power the bunker with puzzle circuits, turn answers into scrap, then spend it wisely before the dead reach the gate.</p>
+        </div>
+        <div class="intro-display" aria-label="Vault status display">
+          <span class="display-label">NIGHT PROTOCOL</span>
+          <div class="display-code"><b id="chamberCode">01</b><span>/</span><b>03</b></div>
+          <span class="display-status" id="uplinkStatus">GATE SEALED</span>
+        </div>
+      </section>
+
+      <nav class="progress-track" aria-label="Game progress">
+        <div class="progress-line"><span id="progressFill"></span></div>
+        <button class="checkpoint active" data-checkpoint="0"><span>01</span><small>Night one</small></button>
+        <button class="checkpoint" data-checkpoint="1" disabled><span>02</span><small>Night two</small></button>
+        <button class="checkpoint" data-checkpoint="2" disabled><span>03</span><small>Last night</small></button>
+      </nav>
+
+      <section class="game-board" aria-live="polite">
+        <aside class="mission-panel">
+          <div class="panel-kicker"><span class="pulse-dot"></span> LIVE OBJECTIVE</div>
+          <p class="mission-number" id="missionNumber">NIGHT 01</p>
+          <h2 id="puzzleTitle">The signal is hidden in plain sight.</h2>
+          <p id="puzzlePrompt">Toggle the levers until the output pattern matches the transmission fragment.</p>
+          <div class="rule-card">
+            <span class="rule-label">FIELD NOTE</span>
+            <p id="puzzleHint">Some signals only appear when the circuit is allowed to rest.</p>
+          </div>
+          <div class="stat-grid">
+            <div><span>SCRAP</span><strong id="scrapCount">$000</strong></div>
+            <div><span>HEALTH</span><strong id="healthCount">100%</strong></div>
+          </div>
+        </aside>
+
+        <section class="console-panel">
+          <div class="console-topline">
+            <div><span class="console-label">INPUT MATRIX</span><span class="console-subtitle">Change a state to reroute the current</span></div>
+            <span class="matrix-id" id="matrixId">MX-21</span>
+          </div>
+
+          <div class="target-zone">
+            <span>REQUIRED OUTPUT</span>
+            <div class="target-bits" id="targetBits" aria-label="Required output pattern"></div>
+            <div class="target-label" id="targetLabel">SILENT CURRENT</div>
+          </div>
+
+          <div class="lever-stage" id="leverStage"></div>
+
+          <div class="output-zone">
+            <div class="output-heading"><span>LIVE OUTPUT</span><code id="outputBinary">00000</code></div>
+            <div class="signal-bars" id="signalBars" aria-label="Current output pattern"></div>
+          </div>
+
+          <div class="console-actions">
+            <button class="secondary-button" id="resetButton">Reset array</button>
+            <button class="primary-button" id="verifyButton">Verify signal <span>→</span></button>
+          </div>
+          <p class="console-message" id="consoleMessage">Awaiting a stable configuration.</p>
+        </section>
+      </section>
+
+      <section class="question-panel is-hidden" id="questionPanel" aria-labelledby="questionTitle">
+        <div class="question-meta"><span class="pulse-dot"></span> CACHE FOUND <span class="question-reward">+<b id="questionPoints">100</b> SCRAP</span></div>
+        <div class="question-content">
+          <div class="question-index" id="questionIndex">01</div>
+          <div class="question-main">
+            <p class="eyebrow">SECURITY QUERY</p>
+            <h2 id="questionTitle">Question title</h2>
+            <div class="answer-list" id="answerList"></div>
+            <p class="answer-feedback" id="answerFeedback"></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="survival-panel is-hidden" id="survivalPanel" aria-labelledby="survivalTitle">
+        <div class="survival-header">
+          <div>
+            <p class="eyebrow">THE GATE IS OPEN</p>
+            <h2 id="survivalTitle">Spend your scrap. Then hold the line.</h2>
+          </div>
+          <div class="scrap-wallet"><span>YOUR SCRAP</span><strong id="shopScrap">$000</strong></div>
+        </div>
+        <div class="survival-grid">
+          <div class="shop-card">
+            <div class="shop-heading"><span class="pulse-dot"></span><span>FIELD SHOP</span><small>ONE ITEM PER NIGHT</small></div>
+            <div class="shop-items" id="shopItems"></div>
+          </div>
+          <div class="horde-card">
+            <div class="horde-top"><span class="horde-label">THREAT WINDOW</span><span id="hordeMessage">Stock up before the siren.</span></div>
+            <div class="threat-scene" id="threatScene" aria-label="Approaching monsters">
+              <div class="moon"></div>
+              <div class="cityline"></div>
+              <div class="boss-monster" id="bossMonster"><span class="clock-face"><b id="clockHand"></b></span><span class="boss-eye left"></span><span class="boss-eye right"></span><span class="boss-body"></span></div>
+              <div class="zombie-pack" id="zombiePack"></div>
+              <div class="gate"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+              <div class="barricade-health"><span>GATE INTEGRITY</span><div><b id="gateHealthBar"></b></div><strong id="gateHealth">100%</strong></div>
+            </div>
+            <div class="battle-controls">
+              <button class="secondary-button" id="skipShopButton">Skip shop</button>
+              <button class="primary-button" id="startNightButton">Start the night <span>→</span></button>
+              <button class="primary-button battle-button is-hidden" id="defendButton">Defend gate <span>⚡</span></button>
+            </div>
+            <p class="battle-tip" id="battleTip">Tip: a reinforced gate buys you precious seconds against Clockhead.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="complete-panel is-hidden" id="completePanel">
+        <div class="complete-orbit"></div>
+        <p class="eyebrow">SUNRISE DETECTED</p>
+        <h2>You cracked the code.<br /><em>You survived the dark.</em></h2>
+        <div class="final-score"><span>SCRAP BANKED</span><strong id="finalScore">000</strong></div>
+        <p id="completeMessage">Three nights survived. The bunker is still standing.</p>
+        <button class="primary-button" id="playAgainButton">Try another run <span>↻</span></button>
+      </section>
+
+      <footer><span>LASTLIGHT BUNKER NETWORK</span><span>NO. 084 — <span id="footerState">GATE SEALED</span></span></footer>
+    </main>
+    <div class="toast" id="toast" role="status"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
