@@ -61,7 +61,7 @@
 
         <section class="console-panel">
           <div class="console-topline">
-            <div><span class="console-label">INPUT MATRIX</span><span class="console-subtitle">Change a state to reroute the current</span></div>
+            <div><span class="console-label">INPUT MATRIX</span><span class="console-subtitle" id="leverTier">LEVEL I // 5 LEVERS</span></div>
             <span class="matrix-id" id="matrixId">MX-21</span>
           </div>
 
@@ -117,12 +117,13 @@
             <div class="threat-scene" id="threatScene" aria-label="Approaching monsters">
               <div class="moon"></div>
               <div class="cityline"></div>
-              <div class="boss-monster" id="bossMonster"><span class="clock-face"><b id="clockHand"></b></span><span class="boss-eye left"></span><span class="boss-eye right"></span><span class="boss-body"></span></div>
+              <div class="boss-monster" id="bossMonster"><span class="clock-face"><b id="clockHand"></b></span><span class="boss-eye left"></span><span class="boss-eye right"></span><span class="boss-maw"><i></i><i></i><i></i><i></i></span><span class="boss-body"></span></div>
               <div class="zombie-pack" id="zombiePack"></div>
               <div class="gate"><i></i><i></i><i></i><i></i><i></i><i></i></div>
               <div class="barricade-health"><span>GATE INTEGRITY</span><div><b id="gateHealthBar"></b></div><strong id="gateHealth">100%</strong></div>
             </div>
             <div class="battle-controls">
+              <span class="weapon-readout" id="weaponReadout">WEAPON // BUNKER PISTOL</span>
               <button class="secondary-button" id="skipShopButton">Skip shop</button>
               <button class="primary-button" id="startNightButton">Start the night <span>→</span></button>
               <button class="primary-button battle-button is-hidden" id="defendButton">Defend gate <span>⚡</span></button>
