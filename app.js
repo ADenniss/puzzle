@@ -36,13 +36,14 @@ const shopItems = [
   { id: "flares", icon: "✦", name: "Decoy flares", description: "Removes one zombie before it attacks.", cost: 65 },
   { id: "nailgun", icon: "⌁", name: "Nailgun", description: "Drops two zombies with every shot.", cost: 95 },
   { id: "clockbreaker", icon: "◉", name: "Clockbreaker shells", description: "Deals double damage to Clockhead.", cost: 85 },
-  { id: "arcRifle", icon: "ϟ", name: "Arc rifle", description: "Deals triple damage to Clockhead.", cost: 130 }
+  { id: "arcRifle", icon: "ϟ", name: "Arc rifle", description: "Deals triple damage to Clockhead.", cost: 130 },
+  { id: "cameras", icon: "▣", name: "Security camera array", description: "Auto-eliminates three zombies during the night.", cost: 105 }
 ];
 
 const state = {
   chamber: 0, levers: [0, 0, 0, 0, 0], attempts: 0, scrap: 0, health: 100,
   sound: true, solvedSignal: false, questionSolved: false, questionStep: 0, questionMistake: false, activeQuestions: [], questionHistory: new Set(), targetHits: 0, targetRequired: 6, targetActive: false, shopUsed: false, nightInProgress: false,
-  zombies: 0, boss: 0, bossClock: 0, damage: 1, zombieDamage: 1, weaponName: "BUNKER PISTOL", nightTimer: null, battleCooldown: false
+  zombies: 0, boss: 0, bossClock: 0, damage: 1, zombieDamage: 1, weaponName: "BUNKER PISTOL", cameraCharges: 0, cameraTimer: 0, nightTimer: null, battleCooldown: false
 };
 
 const $ = (selector) => document.querySelector(selector);
@@ -326,8 +327,8 @@ function renderShop() {
 }
 
 function openSurvival() {
-  state.health = 100; state.zombies = 8 + state.chamber * 2; state.boss = 12 + state.chamber * 4; state.bossClock = 10 - Math.floor(state.chamber / 2); state.damage = 1; state.zombieDamage = 1; state.weaponName = "BUNKER PISTOL"; state.shopUsed = false; state.nightInProgress = false;
-  elements.targetPanel.classList.add("is-hidden"); elements.survival.classList.remove("is-hidden"); elements.hordeCard.classList.remove("is-under-attack"); elements.startNight.classList.remove("is-hidden"); elements.skipShop.classList.remove("is-hidden"); elements.defend.classList.add("is-hidden");
+  state.health = 100; state.zombies = 8 + state.chamber * 2; state.boss = 12 + state.chamber * 4; state.bossClock = 10 - Math.floor(state.chamber / 2); state.damage = 1; state.zombieDamage = 1; state.weaponName = "BUNKER PISTOL"; state.cameraCharges = 0; state.cameraTimer = 0; state.shopUsed = false; state.nightInProgress = false;
+  elements.targetPanel.classList.add("is-hidden"); elements.survival.classList.remove("is-hidden"); elements.hordeCard.classList.remove("is-under-attack", "cameras-online"); elements.startNight.classList.remove("is-hidden"); elements.skipShop.classList.remove("is-hidden"); elements.defend.classList.add("is-hidden");
   elements.hordeMessage.textContent = `Clockhead wakes in ${state.bossClock}s.`; elements.battleTip.textContent = `A pack of ${state.zombies} zombies is shambling toward the gate. One Clockhead is behind them.`;
   renderShop(); renderThreat(); updateMeta(); updateWeaponReadout();
   setTimeout(() => elements.survival.scrollIntoView({ behavior: "smooth", block: "nearest" }), 100);
@@ -341,6 +342,7 @@ function buyItem(item, button) {
   if (item.id === "nailgun") { state.zombieDamage = 2; state.weaponName = "NAILGUN"; elements.battleTip.textContent = "Nailgun loaded. Every shot can tear through two zombies."; }
   if (item.id === "clockbreaker") { state.damage = 2; state.weaponName = "CLOCKBREAKER"; elements.battleTip.textContent = "Clockbreaker shells loaded. Clockhead will take double damage."; }
   if (item.id === "arcRifle") { state.damage = 3; state.weaponName = "ARC RIFLE"; elements.battleTip.textContent = "Arc rifle charged. Clockhead will take triple damage."; }
+  if (item.id === "cameras") { state.cameraCharges = 3; elements.hordeCard.classList.add("cameras-online"); elements.battleTip.textContent = "Security cameras online. They will automatically eliminate three zombies."; }
   renderShop(); renderThreat(); updateMeta(); updateWeaponReadout(); playTone("success"); toast(`${item.name} equipped`);
 }
 
@@ -362,6 +364,12 @@ function startNight() {
 function battleTick() {
   if (!state.nightInProgress) return;
   state.bossClock = Math.max(0, state.bossClock - .7);
+  state.cameraTimer += .7;
+  if (state.cameraCharges > 0 && state.zombies > 0 && state.cameraTimer >= 2.1) {
+    state.zombies -= 1; state.cameraCharges -= 1; state.cameraTimer = 0;
+    elements.battleTip.textContent = `Camera target confirmed. ${state.cameraCharges} automated scan${state.cameraCharges === 1 ? "" : "s"} remain.`;
+    if (!state.cameraCharges) elements.hordeCard.classList.remove("cameras-online");
+  }
   const zombieDamage = state.zombies * .62; const bossDamage = state.bossClock <= 0 && state.boss > 0 ? 4.8 + state.chamber * 1.2 : 0;
   state.health -= zombieDamage + bossDamage;
   if (state.bossClock > 0) elements.hordeMessage.textContent = `${state.zombies} zombies at the gate. Clockhead strikes in ${Math.ceil(state.bossClock)}s.`;
