@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>Last Light</title>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop stop-color="#151c2b"/>
+      <stop offset=".54" stop-color="#263a54"/>
+      <stop offset="1" stop-color="#9d673d"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="78%" cy="20%" r="43%">
+      <stop stop-color="#ffdd8f" stop-opacity=".82"/>
+      <stop offset="1" stop-color="#ffdd8f" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="beam" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop stop-color="#ffefbd" stop-opacity=".45"/>
+      <stop offset="1" stop-color="#ffefbd" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#bg)"/>
+  <rect width="64" height="64" rx="14" fill="url(#glow)"/>
+  <path d="M10 16h44M10 27h44M10 38h44M10 49h44M16 10v44M27 10v44M38 10v44M49 10v44" stroke="#ffe2a9" stroke-opacity=".12"/>
+  <path d="M64 0 50 0 18 64h26Z" fill="url(#beam)"/>
+  <polyline points="10,39 20,39 25,27 33,48 40,33 54,33" fill="none" stroke="#fff2ca" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="10" cy="39" r="3" fill="#ffdb87"/>
+  <circle cx="54" cy="33" r="3" fill="#fff2ca"/>
+</svg>
